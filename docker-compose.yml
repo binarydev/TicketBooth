@@ -1,0 +1,17 @@
+services:
+    postgres:
+        image: "postgres:latest"
+        ports:
+          - "5432:5432"
+        volumes:
+          - localpgdb:/var/lib/postgresql/data/pgdata
+        environment:
+          POSTGRES_PASSWORD: dev
+          PGDATA: /var/lib/postgresql/data/pgdata
+    redis:
+        image: "redislabs/redismod:latest"
+        ports:
+          - "6379:6379"
+
+volumes:
+  localpgdb: {}
