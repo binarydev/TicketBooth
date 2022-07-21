@@ -3,6 +3,7 @@ package datastore
 import (
 	"flag"
 	"fmt"
+	"github.com/binarydev/ticketbooth/models"
 	"log"
 	"os"
 	"time"
@@ -48,7 +49,11 @@ func OpenDatabaseConnection() *gorm.DB {
 }
 
 func migrateDatabase(db *gorm.DB) {
-	db.AutoMigrate(&RemoteIndex{}, &MediaRequest{})
+	err := db.AutoMigrate(&models.RemoteIndex{}, &models.MediaRequest{})
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
 }
 
 func configureLogger() logger.Interface {
@@ -61,8 +66,4 @@ func configureLogger() logger.Interface {
 			Colorful:                  true,        // Disable color
 		},
 	)
-}
-
-func OpenRedisConnection() {
-
 }

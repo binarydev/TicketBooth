@@ -4,10 +4,6 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-func init() {
-
-}
-
 func OpenCacheConnection() *redis.Client {
 	return redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
