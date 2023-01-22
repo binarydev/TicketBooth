@@ -16,7 +16,7 @@ import (
 var dsn string
 
 func InitializeDatabase() *gorm.DB {
-	shouldMigrateDB := flag.Bool("skip-db-migrations", true, "Skip database schema migrations")
+	skipMigrateDB := flag.Bool("skip-db-migrations", false, "Skip database schema migrations")
 	dbhost := flag.String("dbhost", "localhost", "Database host address")
 	dbuser := flag.String("dbuser", "postgres", "Database username")
 	dbpwd := flag.String("dbpassword", "dev", "Database password")
@@ -33,8 +33,10 @@ func InitializeDatabase() *gorm.DB {
 
 	db := OpenDatabaseConnection()
 
-	if *shouldMigrateDB {
+	if *skipMigrateDB {
 		log.Println("Skipping migrations")
+	}else{
+		log.Println("Migrating databases")
 		migrateDatabase(db)
 	}
 	return db
