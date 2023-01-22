@@ -3,18 +3,28 @@ package datastore
 import (
 	"flag"
 	"fmt"
+
 	"github.com/go-redis/redis/v8"
 )
 
-func OpenCacheConnection() *redis.Client {
+var addr string
+var pwd string
+var db int
+
+func InitializeRedis() *redis.Client {
 	host := flag.String("redishost", "localhost", "Redis host address")
-	pwd := flag.String("redispassword", "", "Redis password")
 	port := flag.Int("redisport", 6379, "Redis port number")
-	dbnum := flag.Int("redisdbindex", 0, "Redis database index number")
+	pwd = *flag.String("redispassword", "", "Redis password")
+	db = *flag.Int("redisdbindex", 0, "Redis database index number")
 	flag.Parse()
+	addr = fmt.Sprintf("%s:%d", *host, *port)
+	return OpenCacheConnection()
+}
+
+func OpenCacheConnection() *redis.Client {
 	return redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%d", *host, *port),
-		Password: *pwd,
-		DB:       *dbnum,
+		Addr:     addr,
+		Password: pwd,
+		DB:       db,
 	})
 }
