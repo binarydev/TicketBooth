@@ -26,9 +26,11 @@ func init() {
 		db.Raw("SELECT 'healthy' as status").Scan(&result)
 		_, err := datastore.OpenCacheConnection().Ping(ctx).Result()
 		if err != nil {
-			log.Fatal(err)
+			ctx.JSON(http.StatusFailedDependency, gin.H{"status": err.Error()})
+			log.Println(err)
+		} else {
+			ctx.JSON(http.StatusOK, gin.H{"status": result})
 		}
-		ctx.JSON(http.StatusOK, gin.H{"status": result})
 	})
 
 	initializeRoutes()
