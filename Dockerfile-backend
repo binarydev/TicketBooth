@@ -1,0 +1,6 @@
+FROM alpine
+
+LABEL author="binarydev"
+COPY ticketbooth /usr/local/bin/
+
+CMD ticketbooth
