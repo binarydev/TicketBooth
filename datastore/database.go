@@ -1,7 +1,6 @@
 package datastore
 
 import (
-	"flag"
 	"fmt"
 	"github.com/binarydev/ticketbooth/models"
 	"log"
@@ -13,37 +12,24 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-var dsn string
+var PostgresDsn string
+var SkipMigrateDB *bool
 
-func InitializeDatabase() *gorm.DB {
-	skipMigrateDB := flag.Bool("skip-db-migrations", false, "Skip database schema migrations")
-	dbhost := flag.String("dbhost", "localhost", "Database host address")
-	dbuser := flag.String("dbuser", "postgres", "Database username")
-	dbpwd := flag.String("dbpassword", "dev", "Database password")
-	dbname := flag.String("dbname", "dev", "Database schema name")
-	dbport := flag.Int("dbport", 5432, "Database port number")
-	flag.Parse()
-	dsn = fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=America/New_York",
-		*dbhost,
-		*dbuser,
-		*dbpwd,
-		*dbname,
-		*dbport,
-	)
+func InitializeDatabase() {
 
 	db := OpenDatabaseConnection()
 
-	if *skipMigrateDB {
+	if *SkipMigrateDB {
 		log.Println("Skipping migrations")
-	}else{
+	} else {
 		log.Println("Migrating databases")
 		migrateDatabase(db)
 	}
-	return db
+	fmt.Println("Database connection successfully tested")
 }
 
 func OpenDatabaseConnection() *gorm.DB {
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{Logger: configureLogger()})
+	db, err := gorm.Open(postgres.Open(PostgresDsn), &gorm.Config{Logger: configureLogger()})
 	if err != nil {
 		log.Fatal(err)
 	}
