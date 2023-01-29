@@ -11,6 +11,7 @@ import (
 
 func main() {
 	log.SetFlags(log.Ldate | log.LUTC)
+	initFlags()
 	datastore.InitializeDatabase()
 	router.Engine.Run(":8080")
 }
@@ -21,15 +22,18 @@ func initFlags() {
 	dbpwd := flag.String("dbpassword", "dev", "Database password")
 	dbname := flag.String("dbname", "dev", "Database schema name")
 	dbport := flag.Int("dbport", 5432, "Database port number")
-	datastore.SkipMigrateDB = flag.Bool("skip-db-migrations", false, "Skip database schema migrations")
+	skipDbMigrations := flag.Bool("skip-db-migrations", false, "Skip database schema migrations")
 
 	redishost := flag.String("redishost", "localhost", "Redis host address")
 	redisport := flag.Int("redisport", 6379, "Redis port number")
-	datastore.RedisPwd = *flag.String("redispassword", "", "Redis password")
-	datastore.RedisDbNum = *flag.Int("redisdbindex", 0, "Redis database index number")
+	redispwd := flag.String("redispassword", "", "Redis password")
+	redisDbIndex := flag.Int("redisdbindex", 0, "Redis database index number")
 
 	flag.Parse()
 
+	datastore.SkipMigrateDB = skipDbMigrations
+	datastore.RedisPwd = *redispwd
+	datastore.RedisDbNum = *redisDbIndex
 	datastore.RedisAddr = fmt.Sprintf("%s:%d", *redishost, *redisport)
 	datastore.PostgresDsn = fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=America/New_York",
 		*dbhost,
