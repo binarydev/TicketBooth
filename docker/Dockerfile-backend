@@ -3,4 +3,23 @@ FROM alpine
 LABEL author="binarydev"
 COPY ticketbooth /usr/local/bin/
 
-CMD ticketbooth
+ENV DB_HOST=localhost
+ENV DB_PORT=5432
+ENV DB_NAME=ticketbooth
+ENV DB_USER=ticketbooth
+ENV DB_PASSWORD=password
+ENV REDIS_HOST=localhost
+ENV REDIS_PORT=6379
+ENV REDIS_PASSWORD=password
+ENV REDIS_DBNUM=0
+
+
+CMD ticketbooth --dbhost $DB_HOST \
+    --dbport $DB_PORT 
+    --dbname $DB_NAME \
+    --dbuser $DB_USER \
+    --dbpassword $DB_PASSWORD \
+    --redishost $REDIS_HOST \
+    --redisport $REDIS_PORT \
+    --redispassword $REDIS_PASSWORD \
+    --redisdbindex $REDIS_DBNUM
