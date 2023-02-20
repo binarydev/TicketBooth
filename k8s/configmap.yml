@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ticketbooth-config
+  namespace: ticketbooth
+data:
+  DB_HOST: 192.168.1.10
+  DB_PORT: "5432"
+  DB_NAME: ticketbooth
+  DB_USER: binarydev
+  DB_PASSWORD: password
+  REDIS_HOST: 192.168.1.10
+  REDIS_PORT: "6379"
+  REDIS_PASSWORD: ""
+  REDIS_DBNUM: "0"
