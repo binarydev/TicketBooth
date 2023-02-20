@@ -15,7 +15,7 @@ ENV REDIS_DBNUM=0
 
 
 CMD ticketbooth --dbhost $DB_HOST \
-    --dbport $DB_PORT 
+    --dbport $DB_PORT \
     --dbname $DB_NAME \
     --dbuser $DB_USER \
     --dbpassword $DB_PASSWORD \
